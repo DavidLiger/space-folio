@@ -4,7 +4,7 @@ import Vaisseau from "./models/Vaisseau";
 
 export default function Scene() {
   return (
-    <Canvas camera={{ position: [0, 2, 5] }}>
+    <Canvas style={{ width: "100vw", height: "100vh" }}>
       {/* 🌌 Fond étoilé */}
       <Stars radius={100} depth={50} count={5000} />
       
