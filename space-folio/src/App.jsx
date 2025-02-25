@@ -22,7 +22,7 @@ export default function Scene() {
         
         {/* 💡 Lumières */}
         <ambientLight intensity={0.5} />
-        <Planete position={[2, 0, 0]} nom="React" onClick={() => handleClick("React", "Framework JS moderne.")} />
+        <Planete position={[2, -2, 0]} nom="React" onClick={() => handleClick("React", "Framework JS moderne.")} />
         <Planete position={[-3, 0, 0]} nom="PHP" onClick={() => handleClick("PHP", "Backend robuste et éprouvé.")} />
         <directionalLight position={[5, 10, 5]} intensity={1} />
 

@@ -14,13 +14,24 @@ export default function Planete({ position, nom, onClick }) {
   const modelPath = nom === "PHP" ? "/models/cute_little_planet.glb" : "/models/low_poly_planet.glb";
   const { scene } = useGLTF(modelPath);
 
+  // Gestion du curseur
+  const handlePointerOver = () => {
+    setHover(true);
+    document.body.style.cursor = "pointer"; // Change le curseur
+  };
+
+  const handlePointerOut = () => {
+    setHover(false);
+    document.body.style.cursor = "default"; // Rétablit le curseur
+  };
+
   return (
     <animated.mesh
       scale={scale}
       position={position}
       onClick={onClick}
-      onPointerOver={() => setHover(true)}
-      onPointerOut={() => setHover(false)}
+      onPointerOver={handlePointerOver}
+      onPointerOut={handlePointerOut}
     >
       <primitive object={scene} />
     </animated.mesh>
