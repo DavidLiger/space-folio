@@ -1,5 +1,5 @@
 import { useGLTF } from "@react-three/drei";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 
@@ -8,10 +8,12 @@ export default function Vaisseau({ target = [0, 0, 0], initialPosition = [0, 0, 
   const vaisseauRef = useRef();
   const [hover, setHover] = useState(false);
 
-  // Initialiser la position de départ du vaisseau
-  if (vaisseauRef.current) {
-    vaisseauRef.current.position.set(...initialPosition);
-  }
+  // ✅ Définir la position initiale UNE SEULE FOIS au premier rendu
+  useEffect(() => {
+    if (vaisseauRef.current) {
+      vaisseauRef.current.position.set(...initialPosition);
+    }
+  }, []); // 👈 Exécuté uniquement au montage du composant
 
   // Gestion du curseur
   const handlePointerOver = () => {
