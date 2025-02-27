@@ -30,7 +30,7 @@ export default function Vaisseau({ target = [0, 0, 0], initialPosition = [0, 0, 
     if (vaisseauRef.current) {
       // Position actuelle du vaisseau
       const pos = vaisseauRef.current.position;
-      
+
       // Interpolation pour aller progressivement vers la cible
       pos.x += (target[0] - pos.x) * 0.02; // Ajuste la vitesse d’approche
       pos.y += (target[1] - pos.y) * 0.02;
@@ -53,7 +53,7 @@ export default function Vaisseau({ target = [0, 0, 0], initialPosition = [0, 0, 
 
   return (
     <primitive
-      ref={vaisseauRef} 
+      ref={vaisseauRef}
       object={scene}
       onPointerOver={handlePointerOver}
       onPointerOut={handlePointerOut}

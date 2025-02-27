@@ -9,7 +9,7 @@ export default function Planete({ initialPosition, nom, onClick, revolutionSpeed
   const planetRef = useRef();
   const angleRef = useRef(Math.random() * Math.PI * 2);
   const [boundingBox, setBoundingBox] = useState(null); // ✅ État pour stocker la bounding box
-
+  
   // Rayon de la révolution basé sur la position initiale
   const radius = Math.sqrt(initialPosition[0] ** 2 + initialPosition[1] ** 2);
 
@@ -23,9 +23,9 @@ export default function Planete({ initialPosition, nom, onClick, revolutionSpeed
   // ✅ Calculer la bounding box une fois `scene` chargé
   useEffect(() => {
     if (scene) {
-      const box = new Box3().setFromObject(scene);
-      const size = new Vector3();
-      box.getSize(size);
+    const box = new Box3().setFromObject(scene);
+    const size = new Vector3();
+    box.getSize(size);
       console.log("📏 Taille du modèle :", size);
       console.log("📏 Rayon estimé :", size.length() / 2);
       setBoundingBox(size.length() / 2); // Met à jour l'état
@@ -59,20 +59,14 @@ export default function Planete({ initialPosition, nom, onClick, revolutionSpeed
       scale={scale}
       position={initialPosition}
       onClick={() => {
-        if (boundingBox) { // ✅ Vérifie que boundingBox est bien défini avant d'envoyer
-          console.log(boundingBox);
-          
-          onClick(
-            [
-              planetRef.current.position.x,
-              planetRef.current.position.y,
-              planetRef.current.position.z
-            ],
-            boundingBox
-          );
-        } else {
-          console.warn("⚠️ Bounding box pas encore calculée !");
-        }
+        onClick(
+          [
+            planetRef.current.position.x,
+            planetRef.current.position.y,
+            planetRef.current.position.z
+          ],
+          boundingBox
+        )
       }}
       onPointerOver={handlePointerOver}
       onPointerOut={handlePointerOut}
