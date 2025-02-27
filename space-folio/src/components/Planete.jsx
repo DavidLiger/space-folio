@@ -1,12 +1,14 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useSpring, animated } from "@react-spring/three";
 import { useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
+import { Box3, Vector3 } from "three";
 
 export default function Planete({ initialPosition, nom, onClick, revolutionSpeed = 0.001 }) {
   const [hover, setHover] = useState(false);
   const planetRef = useRef();
   const angleRef = useRef(Math.random() * Math.PI * 2);
+  const [boundingBox, setBoundingBox] = useState(null); // ✅ État pour stocker la bounding box
 
   // Rayon de la révolution basé sur la position initiale
   const radius = Math.sqrt(initialPosition[0] ** 2 + initialPosition[1] ** 2);
@@ -17,6 +19,18 @@ export default function Planete({ initialPosition, nom, onClick, revolutionSpeed
   // Chargement du modèle 3D
   const modelPath = nom === "PHP" ? "/models/cute_little_planet.glb" : "/models/low_poly_planet.glb";
   const { scene } = useGLTF(modelPath);
+
+  // ✅ Calculer la bounding box une fois `scene` chargé
+  useEffect(() => {
+    if (scene) {
+      const box = new Box3().setFromObject(scene);
+      const size = new Vector3();
+      box.getSize(size);
+      console.log("📏 Taille du modèle :", size);
+      console.log("📏 Rayon estimé :", size.length() / 2);
+      setBoundingBox(size.length() / 2); // Met à jour l'état
+    }
+  }, [scene]);
 
   // Gestion du curseur
   const handlePointerOver = () => {
@@ -44,16 +58,26 @@ export default function Planete({ initialPosition, nom, onClick, revolutionSpeed
       ref={planetRef}
       scale={scale}
       position={initialPosition}
-      onClick={() => onClick([
-        planetRef.current.position.x,
-        planetRef.current.position.y,
-        planetRef.current.position.z,
-      ])} // ✅ Passer directement les coordonnées
+      onClick={() => {
+        if (boundingBox) { // ✅ Vérifie que boundingBox est bien défini avant d'envoyer
+          console.log(boundingBox);
+          
+          onClick(
+            [
+              planetRef.current.position.x,
+              planetRef.current.position.y,
+              planetRef.current.position.z
+            ],
+            boundingBox
+          );
+        } else {
+          console.warn("⚠️ Bounding box pas encore calculée !");
+        }
+      }}
       onPointerOver={handlePointerOver}
       onPointerOut={handlePointerOut}
     >
       <primitive object={scene} />
     </animated.mesh>
   );
-  
 }
