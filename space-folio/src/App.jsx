@@ -30,6 +30,7 @@ export default function Scene() {
     }
   
     setModaleContent({ title: nom, content: description });
+    setModaleOpen(true);
   
     // Calculer le vecteur direction
     const direction = [
