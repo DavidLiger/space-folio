@@ -1,7 +1,7 @@
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Stars } from "@react-three/drei";
 import Vaisseau from "./models/Vaisseau";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Planete from "./components/Planete";
 import Modale from "./components/Modale";
 
@@ -10,6 +10,7 @@ export default function Scene() {
   const [modaleContent, setModaleContent] = useState({ title: "", content: "" });
   const vaisseauInitialPosition = [0, 0, 0]; // Position de départ du vaisseau
   const [vaisseauTarget, setVaisseauTarget] = useState(vaisseauInitialPosition);
+  const planetPositionRef = useRef([0, 0, 0]); // Référence pour la position de la planète
 
   const handleClick = (nom, description, planetPosition, planetRadius) => {
     console.log(nom, description, "✅ Position reçue de la planète :", planetPosition, "Rayon :", planetRadius);
@@ -30,7 +31,6 @@ export default function Scene() {
     }
   
     setModaleContent({ title: nom, content: description });
-    setModaleOpen(true);
   
     // Calculer le vecteur direction
     const direction = [
@@ -72,27 +72,22 @@ export default function Scene() {
   
     console.log("🚀 Nouvelle cible du vaisseau :", newTarget);
     setVaisseauTarget(newTarget);
+    planetPositionRef.current = planetPosition; // Met à jour la position de la planète
   };
-  
-  
-  
-  
+
   return (
     <>
       <Canvas style={{ width: "100vw", height: "100vh" }}>
-        {/* 🌌 Fond étoilé */}
         <Stars radius={100} depth={50} count={5000} />
-
-        {/* 💡 Lumières */}
         <ambientLight intensity={0.5} />
         <directionalLight position={[5, 10, 5]} intensity={1} />
 
-        {/* 🪐 Planètes */}
         <Planete
           initialPosition={[16, -2, 5]}
           nom="React"
-          onClick={(pos, radius) => handleClick("React", "Framework JS moderne.", pos, radius)} // ✅ Passe bien les 2 valeurs
+          onClick={(pos, radius) => handleClick("React", "Framework JS moderne.", pos, radius)}
           revolutionSpeed={0.002}
+          positionRef={planetPositionRef} // Passer la référence de position
         />
 
         <Planete
@@ -100,13 +95,11 @@ export default function Scene() {
           nom="PHP"
           onClick={(pos, radius) => handleClick("PHP", "Backend robuste et éprouvé.", pos, radius)}
           revolutionSpeed={0.0015}
+          positionRef={planetPositionRef} // Passer la référence de position
         />
 
+        <Vaisseau target={planetPositionRef.current} initialPosition={vaisseauInitialPosition} />
 
-        {/* 🚀 Le vaisseau */}
-        <Vaisseau target={vaisseauTarget} initialPosition={vaisseauInitialPosition} />
-
-        {/* 🛠️ Contrôles caméra */}
         <OrbitControls />
       </Canvas>
 
