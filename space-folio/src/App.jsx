@@ -98,7 +98,8 @@ export default function Scene() {
           positionRef={planetPositionRef} // Passer la référence de position
         />
 
-        <Vaisseau target={planetPositionRef.current} initialPosition={vaisseauInitialPosition} />
+        {/* <Vaisseau target={planetPositionRef.current} initialPosition={vaisseauInitialPosition} /> */}
+        <Vaisseau planetPosition={planetPositionRef.current} initialPosition={vaisseauInitialPosition} />
 
         <OrbitControls />
       </Canvas>
