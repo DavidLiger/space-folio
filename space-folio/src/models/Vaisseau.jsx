@@ -8,7 +8,7 @@ export default function Vaisseau({ target, planetClicked, initialPosition = [0, 
   const vaisseauRef = useRef();
   const [hover, setHover] = useState(false);
   const angleRef = useRef(0); // Pour suivre l'angle d'orbite
-  const [rocketState, setRocketState] = useState(null)
+  const [rocketState, setRocketState] = useState(null);
 
   // ✅ Définir la position initiale UNE SEULE FOIS au premier rendu
   useEffect(() => {
@@ -18,13 +18,8 @@ export default function Vaisseau({ target, planetClicked, initialPosition = [0, 
   }, []); // 👈 Exécuté uniquement au montage du composant
 
   useEffect(() => {
-    setRocketState('travel')
-  }, [planetClicked])
-
-  useEffect(() => {
-    console.log(rocketState);
-    
-  }, [rocketState])
+    setRocketState('travel');
+  }, [planetClicked]);
 
   // Gestion du curseur
   const handlePointerOver = () => {
@@ -38,11 +33,11 @@ export default function Vaisseau({ target, planetClicked, initialPosition = [0, 
   };
 
   useFrame(() => {
-    if (rocketState && rocketState === 'travel') {
-      travel()
+    if (rocketState === 'travel') {
+      travel();
     }
-    if(rocketState && rocketState === 'orbiting' && planetClicked){
-      orbiting()
+    if (rocketState === 'orbiting' && planetClicked) {
+      orbiting();
     }
   });
 
@@ -60,13 +55,18 @@ export default function Vaisseau({ target, planetClicked, initialPosition = [0, 
       (target[2] - pos.z) ** 2
     );
 
-    if (distance < 0.1) {
+    if (distance < 3) {
       // Arrêter le mouvement vers la cible
       pos.set(target[0], target[1], target[2]);
-      angleRef.current = 0; // Réinitialiser l'angle pour l'orbite
-      setRocketState('orbiting')
+
+      // Calculer l'angle d'orbite basé sur la position actuelle
+      const dx = target[0] - pos.x*5;
+      const dz = target[2] - pos.z;
+      angleRef.current = Math.atan2(dz, dx); // Calculer l'angle à partir de la position actuelle
+
+      setRocketState('orbiting');
     }
-  }
+  };
 
   const orbiting = () => {
     angleRef.current += orbitSpeed;
