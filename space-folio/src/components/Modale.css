@@ -1,17 +1,27 @@
 .modal-overlay {
-    background: rgba(0, 0, 0, 0.6);
-    position: fixed;
-    inset: 0;
-  }
-  
-  .modal-content {
-    background: white;
-    color: black;
-    padding: 20px;
-    border-radius: 10px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-  
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000; /* Assurez-vous que l'overlay est au-dessus du contenu */
+}
+
+.modal-content {
+  position: fixed;
+  color: gray;
+  top: 20px; /* Ajustez la distance du haut */
+  right: -400px; /* Position initiale hors de l'écran */
+  width: 300px; /* Largeur de la modale */
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  transition: right 0.3s ease; /* Animation de glissement */
+  z-index: 1001; /* Assurez-vous que le contenu est au-dessus de l'overlay */
+}
+
+.modal-content.slide-in {
+  right: 20px; /* Position finale à 20px du bord droit */
+}

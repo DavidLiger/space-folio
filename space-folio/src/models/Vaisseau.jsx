@@ -18,7 +18,9 @@ export default function Vaisseau({ target, planetClicked, initialPosition = [0, 
   }, []); // 👈 Exécuté uniquement au montage du composant
 
   useEffect(() => {
-    setRocketState('travel');
+    if(planetClicked){
+      setRocketState('travel');
+    }
   }, [planetClicked]);
 
   // Gestion du curseur
@@ -33,12 +35,13 @@ export default function Vaisseau({ target, planetClicked, initialPosition = [0, 
   };
 
   useFrame(() => {
+    // travel();
     if (rocketState === 'travel') {
       travel();
     }
-    if (rocketState === 'orbiting' && planetClicked) {
-      orbiting();
-    }
+    // if (rocketState === 'orbiting' && planetClicked) {
+    //   orbiting();
+    // }
   });
 
   const travel = () => {
@@ -48,6 +51,8 @@ export default function Vaisseau({ target, planetClicked, initialPosition = [0, 
     pos.y += (target[1] - pos.y) * 0.02;
     pos.z += (target[2] - pos.z) * 0.02;
 
+    const safetyDistance = 3;
+
     // Vérifier si le vaisseau est proche de la cible et arrêter le mouvement
     const distance = Math.sqrt(
       (target[0] - pos.x) ** 2 +
@@ -55,9 +60,22 @@ export default function Vaisseau({ target, planetClicked, initialPosition = [0, 
       (target[2] - pos.z) ** 2
     );
 
-    if (distance < 0.1) {
+    if (distance < safetyDistance) {
+      // pos.set(target[0], target[1], target[2]);
+
       // Arrêter le mouvement vers la cible
-      pos.set(target[0], target[1], target[2]);
+      let x = target[0] - (target[0] - pos.x) * (safetyDistance / distance);
+      let z = target[2] - (target[2] - pos.z) * (safetyDistance / distance) 
+      pos.set(
+        x, 
+        target[1], 
+        z
+      );
+
+      // Calculer l'angle d'orientation basé sur la position actuelle
+      const dx = target[0] - pos.x;
+      const dz = target[2] - pos.z;
+      angleRef.current = Math.atan2(dz, dx);
 
       // Calculer l'angle d'orbite basé sur la position actuelle
       // const dx = target[0] - pos.x;
@@ -65,6 +83,12 @@ export default function Vaisseau({ target, planetClicked, initialPosition = [0, 
       // angleRef.current = Math.atan2(dz, dx); // Calculer l'angle à partir de la position actuelle
 
       // setRocketState('orbiting');
+    } else {
+      // Appliquer la rotation pendant le déplacement
+      const dx = target[0] - pos.x;
+      const dz = target[2] - pos.z;
+      angleRef.current = Math.atan2(dz, dx);
+      vaisseauRef.current.rotation.y = angleRef.current; // Orienter le vaisseau
     }
   };
 
