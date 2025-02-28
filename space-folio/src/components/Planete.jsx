@@ -37,13 +37,17 @@ export default function Planete({ initialPosition, nom, onClick, revolutionSpeed
   useFrame(() => {
     if (planetRef.current) {
       planetRef.current.rotation.y += 0.002;
-      // angleRef.current += revolutionSpeed;
-      // const newX = Math.cos(angleRef.current) * radius;
-      // const newZ = Math.sin(angleRef.current) * radius;
-      // planetRef.current.position.set(newX, initialPosition[1], newZ); // Met à jour la position de la planète
-      // positionRef.current = [newX, initialPosition[1], newZ]; // Met à jour la référence de position
+      // revolution()
     }
   });
+
+  const revolution = () => {
+    angleRef.current += revolutionSpeed;
+    const newX = Math.cos(angleRef.current) * radius;
+    const newZ = Math.sin(angleRef.current) * radius;
+    planetRef.current.position.set(newX, initialPosition[1], newZ); // Met à jour la position de la planète
+    positionRef.current = [newX, initialPosition[1], newZ]; // Met à jour la référence de position
+  }
 
   return (
     <animated.mesh
