@@ -65,8 +65,6 @@ export default function Vaisseau({ target, planetClicked, initialPosition = [0, 
       pos.set(target[0], target[1], target[2]);
       angleRef.current = 0; // Réinitialiser l'angle pour l'orbite
       setRocketState('orbiting')
-      // setIsOrbiting(true); // Passer à l'état d'orbite
-      // setPlanetClicked(false); // Réinitialiser l'état de la planète cliquée
     }
   }
 
@@ -77,8 +75,6 @@ export default function Vaisseau({ target, planetClicked, initialPosition = [0, 
 
     // Mettre à jour la position du vaisseau
     vaisseauRef.current.position.set(x, target[1], z);
-    // setIsOrbiting(false)
-    // setPlanetClicked(false); // Réinitialiser l'état de la planète cliquée
   };
 
   return (
