@@ -55,16 +55,16 @@ export default function Vaisseau({ target, planetClicked, initialPosition = [0, 
       (target[2] - pos.z) ** 2
     );
 
-    if (distance < 3) {
+    if (distance < 0.1) {
       // Arrêter le mouvement vers la cible
       pos.set(target[0], target[1], target[2]);
 
       // Calculer l'angle d'orbite basé sur la position actuelle
-      const dx = target[0] - pos.x*5;
-      const dz = target[2] - pos.z;
-      angleRef.current = Math.atan2(dz, dx); // Calculer l'angle à partir de la position actuelle
+      // const dx = target[0] - pos.x;
+      // const dz = target[2] - pos.z;
+      // angleRef.current = Math.atan2(dz, dx); // Calculer l'angle à partir de la position actuelle
 
-      setRocketState('orbiting');
+      // setRocketState('orbiting');
     }
   };
 

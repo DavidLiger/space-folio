@@ -37,7 +37,7 @@ export default function Planete({ initialPosition, nom, onClick, revolutionSpeed
   useFrame(() => {
     if (planetRef.current) {
       planetRef.current.rotation.y += 0.002;
-      // revolution()
+      revolution()
     }
   });
 
