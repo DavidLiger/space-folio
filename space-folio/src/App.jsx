@@ -11,10 +11,11 @@ export default function Scene() {
   const vaisseauInitialPosition = [0, 0, 0]; // Position de départ du vaisseau
   const [vaisseauTarget, setVaisseauTarget] = useState(vaisseauInitialPosition);
   const planetPositionRef = useRef([0, 0, 0]); // Référence pour la position de la planète
+  const [planetClicked, setPlanetClicked] = useState(null)
 
   const handleClick = (nom, description, planetPosition, planetRadius) => {
-    console.log(nom, description, "✅ Position reçue de la planète :", planetPosition, "Rayon :", planetRadius);
-  
+    // console.log(nom, description, "✅ Position reçue de la planète :", planetPosition, "Rayon :", planetRadius);
+    setPlanetClicked(nom)
     // Vérifier si la position de la planète et le rayon sont valides
     if (
       !Array.isArray(planetPosition) ||
@@ -39,7 +40,7 @@ export default function Scene() {
       planetPosition[2] - vaisseauInitialPosition[2]
     ];
   
-    console.log("🧭 Vecteur direction :", direction);
+    // console.log("🧭 Vecteur direction :", direction);
   
     // Vérifier si le vecteur direction est valide
     if (direction.some(coord => isNaN(coord))) {
@@ -54,7 +55,7 @@ export default function Scene() {
   
     // Normalisation du vecteur direction
     const unitDirection = direction.map(coord => coord / magnitude);
-    console.log("📏 Vecteur direction normalisé :", unitDirection);
+    // console.log("📏 Vecteur direction normalisé :", unitDirection);
   
     // Distance de sécurité (1.5x le rayon de la planète)
     const safetyDistance = planetRadius * 1.5;
@@ -70,7 +71,7 @@ export default function Scene() {
       return;
     }
   
-    console.log("🚀 Nouvelle cible du vaisseau :", newTarget);
+    // console.log("🚀 Nouvelle cible du vaisseau :", newTarget);
     setVaisseauTarget(newTarget);
     planetPositionRef.current = planetPosition; // Met à jour la position de la planète
   };
@@ -98,8 +99,8 @@ export default function Scene() {
           positionRef={planetPositionRef} // Passer la référence de position
         />
 
-        {/* <Vaisseau target={planetPositionRef.current} initialPosition={vaisseauInitialPosition} /> */}
-        <Vaisseau planetPosition={planetPositionRef.current} initialPosition={vaisseauInitialPosition} />
+        <Vaisseau target={planetPositionRef.current} isClickedPlanet={planetClicked} planetClicked={planetClicked} initialPosition={vaisseauInitialPosition} />
+        {/* <Vaisseau planetPosition={planetPositionRef.current} initialPosition={vaisseauInitialPosition} /> */}
 
         <OrbitControls />
       </Canvas>
