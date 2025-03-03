@@ -4,9 +4,11 @@ import Vaisseau from "./models/Vaisseau";
 import { useState, useRef, useEffect } from "react";
 import Planete from "./components/Planete";
 import Modale from "./components/Modale";
+import TimelineModale from "./components/TimelineModale";
 
 export default function Scene() {
   const [modaleOpen, setModaleOpen] = useState(false);
+  const [timelineOpen, setTimelineOpen] = useState(false); // État pour la timeline modale
   const [modaleContent, setModaleContent] = useState({ title: "", content: "" });
   const vaisseauInitialPosition = [0, 0, 0]; // Position de départ du vaisseau
   const [vaisseauTarget, setVaisseauTarget] = useState(vaisseauInitialPosition);
@@ -36,7 +38,8 @@ export default function Scene() {
     }
   
     setModaleContent({ title: nom, content: description });
-    setModaleOpen(true)
+    setModaleOpen(true)// Logique pour la timeline
+    setTimelineOpen(false); // Ouvrir la modale de timeline
   
     // Calculer le vecteur direction
     const direction = [
@@ -110,12 +113,14 @@ export default function Scene() {
           target={planetPositionRef.current}
           planetClickedName={planetClickedName}
           initialPosition={vaisseauInitialPosition}
+          onClick={() => setTimelineOpen(true)}
         />
 
         <OrbitControls />
       </Canvas>
 
       <Modale open={modaleOpen} onClose={() => setModaleOpen(false)} title={modaleContent.title} content={modaleContent.content} />
+      <TimelineModale open={timelineOpen} onClose={() => setTimelineOpen(false)} />
     </>
   );
 }

@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from 'three'; // Importer THREE
 
-export default function Vaisseau({ target, planetClickedName, initialPosition = [0, 0, 0], orbitDistance = 2, orbitSpeed = 0.01 }) {
+export default function Vaisseau({ target, planetClickedName, initialPosition = [0, 0, 0], orbitDistance = 2, orbitSpeed = 0.01, onClick }) {
   const { scene, animations } = useGLTF("/models/space_rocket.glb"); // Charge le modèle
   const vaisseauRef = useRef();
   const [hover, setHover] = useState(false);
@@ -50,7 +50,7 @@ export default function Vaisseau({ target, planetClickedName, initialPosition = 
         flameAction.current.play(); // Rejouer l'animation
       }
     }
-  }, [rocketState]);// 👈 Exécuté uniquement au montage du composant
+  }, [rocketState]); // 👈 Exécuté uniquement au montage du composant
 
   // Gestion du curseur
   const handlePointerOver = () => {
@@ -126,6 +126,7 @@ export default function Vaisseau({ target, planetClickedName, initialPosition = 
       object={scene}
       onPointerOver={handlePointerOver}
       onPointerOut={handlePointerOut}
+      onClick={onClick} // Ajoutez le gestionnaire d'événements ici
     />
   );
 }
