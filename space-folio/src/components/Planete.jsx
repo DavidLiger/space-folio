@@ -3,17 +3,20 @@ import { useSpring, animated } from "@react-spring/three";
 import { useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { Box3, Vector3 } from "three";
+import * as THREE from 'three'; // Importer THREE
 
-export default function Planete({ initialPosition, nom, onClick, revolutionSpeed = 0.001, positionRef }) {
+export default function Planete({ initialPosition, nom, onClick, revolutionSpeed = 0.001, positionRef, planetClickedName }) {
   const [hover, setHover] = useState(false);
   const planetRef = useRef();
   const angleRef = useRef(Math.random() * Math.PI * 2);
   const [boundingBox, setBoundingBox] = useState(null);
-  
+  const mixer = useRef(); // Référence pour le mixer d'animation
+  const danceAction = useRef(); // Référence pour l'action d'animation
+
   const radius = Math.sqrt(initialPosition[0] ** 2 + initialPosition[1] ** 2);
   const { scale } = useSpring({ scale: hover ? 1.2 : 1 });
   const modelPath = nom === "PHP" ? "/models/cute_little_planet.glb" : "/models/low_poly_planet.glb";
-  const { scene } = useGLTF(modelPath);
+  const { scene, animations } = useGLTF(modelPath);
 
   useEffect(() => {
     if (scene) {
@@ -23,6 +26,17 @@ export default function Planete({ initialPosition, nom, onClick, revolutionSpeed
       setBoundingBox(size.length() / 2);
     }
   }, [scene]);
+
+  // Initialiser le mixer d'animation
+  useEffect(() => {
+    if (animations.length) {
+      mixer.current = new THREE.AnimationMixer(scene);
+      const danceAnimation = animations.find(anim => anim.name === "dance");
+      if (danceAnimation) {
+        danceAction.current = mixer.current.clipAction(danceAnimation);
+      }
+    }
+  }, [animations, scene]);
 
   const handlePointerOver = () => {
     setHover(true);
@@ -34,10 +48,20 @@ export default function Planete({ initialPosition, nom, onClick, revolutionSpeed
     document.body.style.cursor = "default";
   };
 
-  useFrame(() => {
+  useFrame((state, delta) => {
     if (planetRef.current) {
       planetRef.current.rotation.y += 0.002;
-      // revolution()
+      if (mixer.current) {
+        mixer.current.update(delta); // Met à jour le mixer d'animation
+      }
+      // revolution();
+    }
+    // Jouer l'animation "dance" si la planète est cliquée
+    if (nom === planetClickedName && danceAction.current) {
+      danceAction.current.play();
+    } else if (danceAction.current) {
+      danceAction.current.stop(); // Arrêter l'animation si elle n'est pas cliquée
+      danceAction.current.time = 0; // Réinitialiser à la frame 0
     }
   });
 
@@ -62,7 +86,7 @@ export default function Planete({ initialPosition, nom, onClick, revolutionSpeed
             planetRef.current.position.z
           ],
           boundingBox
-        )
+        );
       }}
       onPointerOver={handlePointerOver}
       onPointerOut={handlePointerOut}

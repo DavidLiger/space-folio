@@ -1,7 +1,7 @@
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Stars } from "@react-three/drei";
 import Vaisseau from "./models/Vaisseau";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Planete from "./components/Planete";
 import Modale from "./components/Modale";
 
@@ -11,11 +11,15 @@ export default function Scene() {
   const vaisseauInitialPosition = [0, 0, 0]; // Position de départ du vaisseau
   const [vaisseauTarget, setVaisseauTarget] = useState(vaisseauInitialPosition);
   const planetPositionRef = useRef([0, 0, 0]); // Référence pour la position de la planète
-  const [planetClicked, setPlanetClicked] = useState(null)
+  const [planetClickedName, setPlanetClickedName] = useState(null)
+
+  useEffect(() => {
+    console.log(planetClickedName);
+  }, [planetClickedName])
 
   const handleClick = (nom, description, planetPosition, planetRadius) => {
     // console.log(nom, description, "✅ Position reçue de la planète :", planetPosition, "Rayon :", planetRadius);
-    setPlanetClicked(nom)
+    setPlanetClickedName(nom)
     // Vérifier si la position de la planète et le rayon sont valides
     if (
       !Array.isArray(planetPosition) ||
@@ -90,6 +94,7 @@ export default function Scene() {
           onClick={(pos, radius) => handleClick("React", "Framework JS moderne.", pos, radius)}
           revolutionSpeed={0.002}
           positionRef={planetPositionRef} // Passer la référence de position
+          planetClickedName={planetClickedName}
         />
 
         <Planete
@@ -98,10 +103,14 @@ export default function Scene() {
           onClick={(pos, radius) => handleClick("PHP", "Backend robuste et éprouvé.", pos, radius)}
           revolutionSpeed={0.0015}
           positionRef={planetPositionRef} // Passer la référence de position
+          planetClickedName={planetClickedName}
         />
 
-        <Vaisseau target={planetPositionRef.current} isClickedPlanet={planetClicked} planetClicked={planetClicked} initialPosition={vaisseauInitialPosition} />
-        {/* <Vaisseau planetPosition={planetPositionRef.current} initialPosition={vaisseauInitialPosition} /> */}
+        <Vaisseau 
+          target={planetPositionRef.current}
+          planetClickedName={planetClickedName}
+          initialPosition={vaisseauInitialPosition}
+        />
 
         <OrbitControls />
       </Canvas>
