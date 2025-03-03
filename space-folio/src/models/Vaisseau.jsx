@@ -10,6 +10,7 @@ export default function Vaisseau({ target, planetClicked, initialPosition = [0, 
   const angleRef = useRef(0); // Pour suivre l'angle d'orbite
   const [rocketState, setRocketState] = useState(null);
   const mixer = useRef(); // Référence pour le mixer d'animation
+  const flameAction = useRef(); // Référence pour l'action d'animation
 
   // ✅ Définir la position initiale UNE SEULE FOIS au premier rendu
   useEffect(() => {
@@ -24,7 +25,8 @@ export default function Vaisseau({ target, planetClicked, initialPosition = [0, 
       mixer.current = new THREE.AnimationMixer(scene);
       const flameAnimation = animations.find(anim => anim.name === "flame");
       if (flameAnimation) {
-        mixer.current.clipAction(flameAnimation).play();
+        flameAction.current = mixer.current.clipAction(flameAnimation);
+        flameAction.current.play();
       }
     }
   }, [animations, scene]);
@@ -41,8 +43,14 @@ export default function Vaisseau({ target, planetClicked, initialPosition = [0, 
     }
     if (rocketState === 'idling') {
       console.log('idling');
+      // Ramener l'animation à la frame 0
+      if (flameAction.current) {
+        flameAction.current.stop(); // Arrêter l'animation
+        flameAction.current.time = 0; // Réinitialiser à la frame 0
+        flameAction.current.play(); // Rejouer l'animation
+      }
     }
-  }, [rocketState]); // 👈 Exécuté uniquement au montage du composant
+  }, [rocketState]);// 👈 Exécuté uniquement au montage du composant
 
   // Gestion du curseur
   const handlePointerOver = () => {
