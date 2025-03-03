@@ -11,7 +11,6 @@ export default function Scene() {
   const [timelineOpen, setTimelineOpen] = useState(false); // État pour la timeline modale
   const [modaleContent, setModaleContent] = useState({ title: "", content: "" });
   const vaisseauInitialPosition = [0, 0, 0]; // Position de départ du vaisseau
-  const [vaisseauTarget, setVaisseauTarget] = useState(vaisseauInitialPosition);
   const planetPositionRef = useRef([0, 0, 0]); // Référence pour la position de la planète
   const [planetClickedName, setPlanetClickedName] = useState(null)
 
@@ -78,9 +77,7 @@ export default function Scene() {
     if (newTarget.some(coord => isNaN(coord))) {
       return;
     }
-  
-    // console.log("🚀 Nouvelle cible du vaisseau :", newTarget);
-    setVaisseauTarget(newTarget);
+    
     planetPositionRef.current = planetPosition; // Met à jour la position de la planète
   };
 
