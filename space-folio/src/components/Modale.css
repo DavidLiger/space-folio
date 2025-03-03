@@ -11,17 +11,22 @@
 .modal-content {
   position: fixed;
   color: gray;
-  top: 20px; /* Ajustez la distance du haut */
-  right: -400px; /* Position initiale hors de l'écran */
+  top: 18%;
+  right: 0; /* Commence à droite */
   width: 300px; /* Largeur de la modale */
   background: white;
   border-radius: 8px;
   padding: 20px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-  transition: right 0.3s ease; /* Animation de glissement */
-  z-index: 1001; /* Assurez-vous que le contenu est au-dessus de l'overlay */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);  
+  transform: translateY(-50%); /* Centrer verticalement */
+  transition: transform 0.3s ease; /* Transition pour l'animation */
+  z-index: 1000; 
 }
 
 .modal-content.slide-in {
-  right: 20px; /* Position finale à 20px du bord droit */
+  transform: translateY(-50%) translateX(-10px); /* Position finale */
+}
+
+.modal-content.slide-out {
+  transform: translateY(-50%) translateX(100%); /* Position de sortie (hors de l'écran) */
 }
