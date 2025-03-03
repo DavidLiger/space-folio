@@ -1,14 +1,15 @@
 import { useGLTF } from "@react-three/drei";
-import { useEffect, useState } from "react";
-import { useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
+import * as THREE from 'three'; // Importer THREE
 
 export default function Vaisseau({ target, planetClicked, initialPosition = [0, 0, 0], orbitDistance = 2, orbitSpeed = 0.01 }) {
-  const { scene } = useGLTF("/models/space_rocket.glb"); // Charge le modèle
+  const { scene, animations } = useGLTF("/models/space_rocket.glb"); // Charge le modèle
   const vaisseauRef = useRef();
   const [hover, setHover] = useState(false);
   const angleRef = useRef(0); // Pour suivre l'angle d'orbite
   const [rocketState, setRocketState] = useState(null);
+  const mixer = useRef(); // Référence pour le mixer d'animation
 
   // ✅ Définir la position initiale UNE SEULE FOIS au premier rendu
   useEffect(() => {
@@ -17,11 +18,31 @@ export default function Vaisseau({ target, planetClicked, initialPosition = [0, 
     }
   }, []); // 👈 Exécuté uniquement au montage du composant
 
+  // Initialiser le mixer d'animation
   useEffect(() => {
-    if(planetClicked){
+    if (animations.length) {
+      mixer.current = new THREE.AnimationMixer(scene);
+      const flameAnimation = animations.find(anim => anim.name === "flame");
+      if (flameAnimation) {
+        mixer.current.clipAction(flameAnimation).play();
+      }
+    }
+  }, [animations, scene]);
+
+  useEffect(() => {
+    if (planetClicked) {
       setRocketState('travel');
     }
   }, [planetClicked]);
+
+  useEffect(() => {
+    if (rocketState === 'travel') {
+      console.log('traveling');
+    }
+    if (rocketState === 'idling') {
+      console.log('idling');
+    }
+  }, [rocketState]); // 👈 Exécuté uniquement au montage du composant
 
   // Gestion du curseur
   const handlePointerOver = () => {
@@ -34,14 +55,16 @@ export default function Vaisseau({ target, planetClicked, initialPosition = [0, 
     document.body.style.cursor = "default"; // Rétablit le curseur
   };
 
-  useFrame(() => {
-    // travel();
+  useFrame((state, delta) => {
     if (rocketState === 'travel') {
       travel();
+      if (mixer.current) {
+        mixer.current.update(delta); // Met à jour le mixer d'animation
+      }
     }
-    // if (rocketState === 'orbiting' && planetClicked) {
-    //   orbiting();
-    // }
+    if (rocketState === 'idling' && planetClicked) {
+      // orbiting();
+    }
   });
 
   const travel = () => {
@@ -61,30 +84,18 @@ export default function Vaisseau({ target, planetClicked, initialPosition = [0, 
     );
 
     if (distance < safetyDistance) {
-      // pos.set(target[0], target[1], target[2]);
-
-      // Arrêter le mouvement vers la cible
       let x = target[0] - (target[0] - pos.x) * (safetyDistance / distance);
-      let z = target[2] - (target[2] - pos.z) * (safetyDistance / distance) 
-      pos.set(
-        x, 
-        target[1], 
-        z
-      );
+      let y = target[1] - (target[1] - pos.y) * (safetyDistance / distance);
+      let z = target[2] - (target[2] - pos.z) * (safetyDistance / distance);
+      pos.set(x, y, z);
 
       // Calculer l'angle d'orientation basé sur la position actuelle
       const dx = target[0] - pos.x;
       const dz = target[2] - pos.z;
       angleRef.current = Math.atan2(dz, dx);
 
-      // Calculer l'angle d'orbite basé sur la position actuelle
-      // const dx = target[0] - pos.x;
-      // const dz = target[2] - pos.z;
-      // angleRef.current = Math.atan2(dz, dx); // Calculer l'angle à partir de la position actuelle
-
-      // setRocketState('orbiting');
+      setRocketState('idling');
     } else {
-      // Appliquer la rotation pendant le déplacement
       const dx = target[0] - pos.x;
       const dz = target[2] - pos.z;
       angleRef.current = Math.atan2(dz, dx);
