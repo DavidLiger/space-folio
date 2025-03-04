@@ -1,0 +1,32 @@
+.biomodal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000; /* Assurez-vous que l'overlay est au-dessus du contenu */
+  }
+  
+  .biomodal-content {
+    position: fixed;
+    color: gray;
+    top: 18%;
+    left: 0; /* Commence à droite */
+    width: 300px; /* Largeur de la modale */
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);  
+    transform: translateY(-50%); /* Centrer verticalement */
+    transition: transform 0.3s ease; /* Transition pour l'animation */
+    z-index: 1000; 
+  }
+  
+  .biomodal-content.slide-in {
+    transform: translateY(-50%) translateX(-10px); /* Position finale */
+  }
+  
+  .biomodal-content.slide-out {
+    transform: translateY(-50%) translateX(-100%); /* Position de sortie (hors de l'écran) */
+  }

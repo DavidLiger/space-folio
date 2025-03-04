@@ -5,6 +5,7 @@ import { useState, useRef, useEffect } from "react";
 import Planete from "./components/Planete";
 import Modale from "./components/Modale";
 import TimelineModale from "./components/TimelineModale";
+import HUD from "./components/HUD";
 
 export default function Scene() {
   const [modaleOpen, setModaleOpen] = useState(false);
@@ -118,6 +119,7 @@ export default function Scene() {
 
       <Modale open={modaleOpen} onClose={() => setModaleOpen(false)} title={modaleContent.title} content={modaleContent.content} />
       <TimelineModale open={timelineOpen} onClose={() => setTimelineOpen(false)} />
+      <HUD />
     </>
   );
 }
