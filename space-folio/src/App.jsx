@@ -6,8 +6,6 @@ import Planete from "./components/Planete";
 import Modale from "./components/Modale";
 import TimelineModale from "./components/TimelineModale";
 import HUD from "./components/HUD";
-import CameraFollow from "./components/CameraFollow";
-import CameraLookAt from "./components/CameraLookAt"; // Importez le composant CameraLookAt
 import Controls from "./components/CameraControls"; // Importez le composant Controls
 
 
@@ -98,7 +96,6 @@ export default function Scene() {
 
         {/* <CameraLookAt target={planetPositionRef} />  */}
         <Controls target={planetPositionRef} /> {/* Utilisez le composant Controls ici */}
-
 
         <OrbitControls />
       </Canvas>

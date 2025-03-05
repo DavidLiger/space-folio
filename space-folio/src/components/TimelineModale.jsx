@@ -18,7 +18,7 @@ export default function TimelineModale({ open, onClose }) {
       <Dialog.Portal>
         {/* <Dialog.Overlay className="modal-overlay" /> */}
         <Dialog.Content className={`timeline-modal-content ${animationClass}`}>
-          <h2>Timeline</h2>
+          <Dialog.Title>Timeline</Dialog.Title>
           <p>Voici votre timeline...</p>
           <Dialog.Close className="modal-close">Fermer</Dialog.Close>
         </Dialog.Content>
