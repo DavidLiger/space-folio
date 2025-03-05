@@ -19,7 +19,7 @@ export default function Scene() {
   const planetPositionRef = useRef([0, 0, 0]);
   const [planetClickedName, setPlanetClickedName] = useState(null);
   const [isTraveling, setIsTraveling] = useState(false);
-  const [cameraPosition, setCameraPosition] = useState(new THREE.Vector3(0, 0, 12));
+  const [cameraPosition, setCameraPosition] = useState(new THREE.Vector3(0, 5, 15)); // Position initiale de la caméra
   const [cameraLookAt, setCameraLookAt] = useState(new THREE.Vector3(0, 0, 0));
 
 

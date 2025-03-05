@@ -8,7 +8,7 @@ CameraControls.install({ THREE });
 function Controls({ target, setCameraPosition, setCameraLookAt, cameraLookAt, cameraPosition }) {
   const { camera, gl } = useThree();
   const controls = useMemo(() => new CameraControls(camera, gl.domElement), [camera, gl]);
-  const [initialPosition, setInitialPosition] = useState([0,0,12]) 
+  const [initialPosition, setInitialPosition] = useState([0, 5, 15]) 
 
   useFrame((state, delta) => {
     if (target.current) {
