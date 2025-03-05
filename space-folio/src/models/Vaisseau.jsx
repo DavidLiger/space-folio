@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from 'three'; // Importer THREE
 
-export default function Vaisseau({ target, planetClickedName, initialPosition = [0, 0, 0], orbitDistance = 2, orbitSpeed = 0.01, onClick }) {
+export default function Vaisseau({ target, planetClickedName, initialPosition = [0, 0, -5], orbitDistance = 2, orbitSpeed = 0.01, onClick, setIsTraveling }) {
   const { scene, animations } = useGLTF("/models/space_rocket.glb"); // Charge le modèle
   const vaisseauRef = useRef();
   const [hover, setHover] = useState(false);
@@ -34,6 +34,7 @@ export default function Vaisseau({ target, planetClickedName, initialPosition = 
   useEffect(() => {
     if (planetClickedName) {
       setRocketState('travel');
+      setIsTraveling(true)
     }
   }, [planetClickedName]);
 
@@ -103,6 +104,7 @@ export default function Vaisseau({ target, planetClickedName, initialPosition = 
       angleRef.current = Math.atan2(dz, dx);
 
       setRocketState('idling');
+      setIsTraveling(false)
     } else {
       const dx = target[0] - pos.x;
       const dz = target[2] - pos.z;

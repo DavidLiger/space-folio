@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, Stars } from "@react-three/drei";
 import Vaisseau from "./models/Vaisseau";
@@ -17,6 +18,10 @@ export default function Scene() {
   const vaisseauInitialPosition = [0, 0, 0];
   const planetPositionRef = useRef([0, 0, 0]);
   const [planetClickedName, setPlanetClickedName] = useState(null);
+  const [isTraveling, setIsTraveling] = useState(false);
+  const [cameraPosition, setCameraPosition] = useState(new THREE.Vector3(0, 0, 12));
+  const [cameraLookAt, setCameraLookAt] = useState(new THREE.Vector3(0, 0, 0));
+
 
   useEffect(() => {
     console.log(planetClickedName);
@@ -92,12 +97,26 @@ export default function Scene() {
           planetClickedName={planetClickedName}
           initialPosition={vaisseauInitialPosition}
           onClick={() => setTimelineOpen(true)}
+          setIsTraveling={setIsTraveling}
         />
 
-        {/* <CameraLookAt target={planetPositionRef} />  */}
-        <Controls target={planetPositionRef} /> {/* Utilisez le composant Controls ici */}
+        {isTraveling &&
+          <Controls 
+            target={planetPositionRef}
+            setCameraPosition={setCameraPosition} 
+            setCameraLookAt={setCameraLookAt} 
+            cameraLookAt={cameraLookAt}
+            cameraPosition={cameraPosition}
+          /> 
+        }
 
-        <OrbitControls />
+        <OrbitControls 
+          enableZoom={true} 
+          enablePan={true} 
+          enableRotate={true} 
+          target={cameraLookAt} 
+          position={cameraPosition} 
+        />
       </Canvas>
 
       <Modale open={modaleOpen} onClose={() => setModaleOpen(false)} title={modaleContent.title} content={modaleContent.content} />
