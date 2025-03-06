@@ -16,7 +16,7 @@ function StarsField() {
   const starsGeometry = new THREE.BufferGeometry();
   const positions = new Float32Array(count * 3);
   const colors = new Float32Array(count * 3);
-  const distanceFromCenter = 700; // Distance souhaitée d
+  const distanceFromCenter = 1000; // Distance souhaitée d
 
   for (let i = 0; i < count; i++) {
     positions[i * 3] = (Math.random() - 0.5) * distanceFromCenter * 2; // X
