@@ -11,7 +11,7 @@
 .modal-content {
   position: fixed;
   color: gray;
-  top: 18%;
+  top: 25%;
   right: 0; /* Commence à droite */
   width: 300px; /* Largeur de la modale */
   background: white;

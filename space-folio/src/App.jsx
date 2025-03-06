@@ -9,7 +9,49 @@ import TimelineModale from "./components/TimelineModale";
 import HUD from "./components/HUD";
 import Controls from "./components/CameraControls"; // Importez le composant Controls
 
+// Composant pour les étoiles scintillantes
+function StarsField() {
+  const starsRef = useRef();
+  const count = 2000; // Nombre d'étoiles
+  const starsGeometry = new THREE.BufferGeometry();
+  const positions = new Float32Array(count * 3);
+  const colors = new Float32Array(count * 3);
+  const distanceFromCenter = 700; // Distance souhaitée d
 
+  for (let i = 0; i < count; i++) {
+    positions[i * 3] = (Math.random() - 0.5) * distanceFromCenter * 2; // X
+    positions[i * 3 + 1] = (Math.random() - 0.5) * distanceFromCenter * 2; // Y
+    positions[i * 3 + 2] = (Math.random() - 0.5) * distanceFromCenter * 2; // Z
+
+    colors[i * 10] = 1; // R
+    colors[i * 10 + 1] = 1; // G
+    colors[i * 10 + 2] = 1; // B
+  }
+
+  starsGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  starsGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+  useFrame((state) => {
+    const time = state.clock.getElapsedTime();
+    const colorsArray = starsGeometry.attributes.color.array;
+
+    // Modifiez les couleurs pour créer un effet de scintillement
+    for (let i = 0; i < colorsArray.length; i += 3) {
+      const flicker = Math.sin(time * 5 + i) * 0.5 + 0.5; // Crée un effet de scintillement
+      colorsArray[i] = flicker; // R
+      colorsArray[i + 1] = flicker; // G
+      colorsArray[i + 2] = flicker; // B
+    }
+
+    starsGeometry.attributes.color.needsUpdate = true; // Indiquez que les couleurs ont changé
+  });
+
+  return (
+    <points ref={starsRef} geometry={starsGeometry}>
+      <pointsMaterial size={1} vertexColors />
+    </points>
+  );
+}
 
 export default function Scene() {
   const [modaleOpen, setModaleOpen] = useState(false);
@@ -65,12 +107,13 @@ export default function Scene() {
     setTimelineOpen(true);
   };
 
-
-
   return (
     <>
-      <Canvas style={{ width: "100vw", height: "100vh" }}>
-        <Stars radius={100} depth={50} count={5000} />
+      <Canvas style={{ width: "100vw", height: "100vh", background: "black" }}>
+        <Stars radius={100} depth={50} count={3000} />
+        {!isTraveling &&
+          <StarsField />
+        } 
         <ambientLight intensity={0.5} />
         <directionalLight position={[5, 10, 5]} intensity={1} />
 
@@ -110,13 +153,17 @@ export default function Scene() {
           /> 
         }
 
-        <OrbitControls 
-          enableZoom={true} 
-          enablePan={true} 
-          enableRotate={true} 
-          target={cameraLookAt} 
-          position={cameraPosition} 
-        />
+          <OrbitControls 
+            enableZoom={true} 
+            enablePan={true} 
+            enableRotate={true} 
+            target={cameraLookAt} 
+            position={cameraPosition} 
+            minDistance={5} // Distance minimale (ajustez selon vos besoins)
+            maxDistance={40} // Distance maximale (ajustez selon vos besoins)
+            zoomSpeed={0.8} // Vitesse de zoom (ajustez selon vos besoins)
+            panSpeed={0.5} // Vitesse de déplacement (ajustez selon vos besoins)
+          />
       </Canvas>
 
       <Modale open={modaleOpen} onClose={() => setModaleOpen(false)} title={modaleContent.title} content={modaleContent.content} />

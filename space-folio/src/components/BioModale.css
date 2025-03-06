@@ -11,7 +11,7 @@
   .biomodal-content {
     position: fixed;
     color: gray;
-    top: 18%;
+    top: 25%;
     left: 0; /* Commence à droite */
     width: 300px; /* Largeur de la modale */
     background: white;
@@ -24,7 +24,7 @@
   }
   
   .biomodal-content.slide-in {
-    transform: translateY(-50%) translateX(-10px); /* Position finale */
+    transform: translateY(-50%) translateX(150px); /* Position finale */
   }
   
   .biomodal-content.slide-out {
