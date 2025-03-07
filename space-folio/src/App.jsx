@@ -4,6 +4,9 @@ import { OrbitControls, Stars } from "@react-three/drei";
 import Vaisseau from "./models/Vaisseau";
 import { useState, useRef, useEffect } from "react";
 import Planete from "./components/Planete";
+import PhpPlanetPath from "/models/cute_little_planet.glb";
+import ReactPlanetPath from "/models/low_poly_planet.glb";
+import WebGLPlanetPath from "/models/origami_planet.glb";
 import Modale from "./components/Modale";
 import TimelineModale from "./components/TimelineModale";
 import HUD from "./components/HUD";
@@ -131,6 +134,7 @@ export default function Scene() {
         <directionalLight position={[5, 10, 5]} intensity={1} />
 
         <Planete
+          modelPath={ReactPlanetPath}
           initialPosition={[16, -2, 5]}
           nom="React"
           onClick={(pos, radius) => handleClick("React", "Framework JS moderne.", pos, radius)}
@@ -140,9 +144,20 @@ export default function Scene() {
         />
 
         <Planete
+          modelPath={PhpPlanetPath}
           initialPosition={[-14, 0, 5]}
           nom="PHP"
           onClick={(pos, radius) => handleClick("PHP", "Backend robuste et éprouvé.", pos, radius)}
+          revolutionSpeed={0.0015}
+          positionRef={planetPositionRef}
+          planetClickedName={planetClickedName}
+        />
+
+        <Planete
+          modelPath={WebGLPlanetPath}
+          initialPosition={[0, 2, 25]}
+          nom="WebGL"
+          onClick={(pos, radius) => handleClick("WebGL", "Univers 3D immersif", pos, radius)}
           revolutionSpeed={0.0015}
           positionRef={planetPositionRef}
           planetClickedName={planetClickedName}

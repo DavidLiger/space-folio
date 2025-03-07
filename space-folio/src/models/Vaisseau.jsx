@@ -83,6 +83,9 @@ export default function Vaisseau({ target, planetClickedName, initialPosition = 
     pos.y += (target[1] - pos.y) * 0.02;
     pos.z += (target[2] - pos.z) * 0.02;
 
+    // Orienter le vaisseau vers la cible
+    vaisseauRef.current.lookAt(new THREE.Vector3(...target));
+
     const safetyDistance = 3;
 
     // Vérifier si le vaisseau est proche de la cible et arrêter le mouvement
@@ -99,9 +102,10 @@ export default function Vaisseau({ target, planetClickedName, initialPosition = 
       pos.set(x, y, z);
 
       // Calculer l'angle d'orientation basé sur la position actuelle
-      const dx = target[0] - pos.x;
-      const dz = target[2] - pos.z;
-      angleRef.current = Math.atan2(dz, dx);
+      // const dx = target[0] - pos.x;
+      // const dz = target[2] - pos.z;
+      // angleRef.current = Math.atan2(dz, dx);
+      // vaisseauRef.current.rotation.y = angleRef.current; // Orienter le vaisseau
 
       setRocketState('idling');
       setIsTraveling(false)

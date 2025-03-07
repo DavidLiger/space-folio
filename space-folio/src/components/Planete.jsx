@@ -5,7 +5,7 @@ import { useFrame } from "@react-three/fiber";
 import { Box3, Vector3 } from "three";
 import * as THREE from 'three'; // Importer THREE
 
-export default function Planete({ initialPosition, nom, onClick, revolutionSpeed = 0.001, positionRef, planetClickedName }) {
+export default function Planete({ modelPath, initialPosition, nom, onClick, revolutionSpeed = 0.001, positionRef, planetClickedName }) {
   const [hover, setHover] = useState(false);
   const planetRef = useRef();
   const angleRef = useRef(Math.random() * Math.PI * 2);
@@ -15,7 +15,7 @@ export default function Planete({ initialPosition, nom, onClick, revolutionSpeed
 
   const radius = Math.sqrt(initialPosition[0] ** 2 + initialPosition[1] ** 2);
   const { scale } = useSpring({ scale: hover ? 1.2 : 1 });
-  const modelPath = nom === "PHP" ? "/models/cute_little_planet.glb" : "/models/low_poly_planet.glb";
+  // const modelPath = nom === "PHP" ? "/models/cute_little_planet.glb" : "/models/low_poly_planet.glb";
   const { scene, animations } = useGLTF(modelPath);
 
   useEffect(() => {
