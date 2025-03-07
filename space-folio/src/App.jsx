@@ -63,11 +63,24 @@ export default function Scene() {
   const [isTraveling, setIsTraveling] = useState(false);
   const [cameraPosition, setCameraPosition] = useState(new THREE.Vector3(0, 5, 15)); // Position initiale de la caméra
   const [cameraLookAt, setCameraLookAt] = useState(new THREE.Vector3(0, 0, 0));
+  const [orbitControlsPosition, setOrbitControlsPosition] = useState(new THREE.Vector3(0, 0, 0))
+  const [maxDistance, setMaxDistance] = useState(40)
 
 
   useEffect(() => {
     console.log(planetClickedName);
   }, [planetClickedName]);
+
+  useEffect(() => {
+    if(isTraveling){
+      setMaxDistance(5)
+    }
+    if(!isTraveling){
+      setTimeout(()=>{
+        setMaxDistance(40)
+      },500)
+    }
+  }, [isTraveling])
 
   const handleClick = (nom, description, planetPosition, planetRadius) => {
     setPlanetClickedName(nom);
@@ -148,6 +161,7 @@ export default function Scene() {
             target={planetPositionRef}
             setCameraPosition={setCameraPosition} 
             setCameraLookAt={setCameraLookAt} 
+            setMaxDistance={setMaxDistance}
             cameraLookAt={cameraLookAt}
             cameraPosition={cameraPosition}
           /> 
@@ -158,9 +172,9 @@ export default function Scene() {
             enablePan={true} 
             enableRotate={true} 
             target={cameraLookAt} 
-            position={cameraPosition} 
-            minDistance={5} // Distance minimale (ajustez selon vos besoins)
-            maxDistance={40} // Distance maximale (ajustez selon vos besoins)
+            position={orbitControlsPosition} 
+            minDistance={3} // Distance minimale (ajustez selon vos besoins)
+            maxDistance={maxDistance} // Distance maximale (ajustez selon vos besoins)
             zoomSpeed={0.8} // Vitesse de zoom (ajustez selon vos besoins)
             panSpeed={0.5} // Vitesse de déplacement (ajustez selon vos besoins)
           />
