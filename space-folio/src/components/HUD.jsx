@@ -3,6 +3,8 @@ import BioModale from "./BioModale";
 import PlanetIcon from "./PlanetIcon"; 
 import planetBtn01 from "../assets/images/planet_btn_01.png";
 import planetBtn02 from "../assets/images/planet_btn_02.png";
+import rocketBtn from "../assets/images/rocket_btn.png"
+import '../fonts.css'; // Importez le fichier CSS ici
 
 const HUD = ({ onPlanetClick, onVaisseauClick }) => {
   const [bioModaleOpen, setBioModaleOpen] = useState(false);
@@ -14,9 +16,10 @@ const HUD = ({ onPlanetClick, onVaisseauClick }) => {
   return (
     <>
       <div style={styles.hud}>
-        <h1 onClick={handleTitleClick} style={styles.title}>
-          Mon Titre
-        </h1>
+        <div style={styles.titleContainer}>
+          <span onClick={handleTitleClick} style={styles.title}>David Liger</span>
+          <span onClick={handleTitleClick} style={styles.subTitle}>Developpeur Full Stack</span>
+        </div>
         <div style={styles.iconContainer}>
           <PlanetIcon
             onClick={() => onPlanetClick("React", "Framework JS moderne.", [16, -2, 5], 1)}
@@ -30,7 +33,7 @@ const HUD = ({ onPlanetClick, onVaisseauClick }) => {
           />
           <PlanetIcon
             onClick={onVaisseauClick}
-            imageSrc="../assets/react.svg" // Remplacez par le chemin de votre image
+            imageSrc={rocketBtn} // Remplacez par le chemin de votre image
             altText="Vaisseau"
           />
         </div>
@@ -60,10 +63,27 @@ const styles = {
     alignItems: "center",
     pointerEvents: "none", // Permettre les clics à travers le HUD
   },
+  titleContainer: {
+    display: "flex",
+    flexDirection: "column", // Aligner les éléments en colonne
+    alignItems: "center", // Centrer les éléments
+  },
   title: {
     marginTop: "20px",
     cursor: "pointer",
     pointerEvents: "auto", // Rendre le titre cliquable
+    fontSize: "72px", // Taille de police pour le titre
+    fontWeight: "bold", // Mettre le titre en gras
+    fontFamily: 'HemiHead', // Utiliser la police personnalisée
+    lineHeight: "1.1", // Ajuster la hauteur de ligne si nécessaire
+  },
+  subTitle: {
+    fontSize: "48px", // Taille de police pour le sous-titre
+    // marginTop: "5px", // Espacement entre le titre et le sous-titre
+    cursor: "pointer",
+    pointerEvents: "auto", // Rendre le titre cliquable
+    fontFamily: 'CustomFont', // Utiliser la police personnalisée
+    lineHeight: "1.1", // Ajuster la hauteur de ligne si nécessaire
   },
   iconContainer: {
     position: "absolute",

@@ -1,0 +1,13 @@
+@font-face {
+    font-family: 'CustomFont';
+    src: url('./assets/fonts/Best_In_Class_V.1.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+  font-family: 'HemiHead';
+  src: url('./assets/fonts/Hemi_Head_Bd_It.otf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
